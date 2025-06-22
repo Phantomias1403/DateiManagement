@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="p-4">
+    <h1>📁Cloud</h1>
+    <p>Du bist in: <strong>{{ aktueller_pfad or 'Startseite' }}</strong></p>
+
+    {% if aktueller_pfad %}
+        <a href="{{ url_for('index', pfad=zurück_pfad) }}" class="btn btn-secondary mb-3">⬅️ Zurück</a>
+    {% endif %}
+
+    <form action="/ordner-anlegen" method="post" enctype="multipart/form-data" class="mb-4 d-flex gap-2">
+        <input type="text" name="Ordnerstruktur" class="form-control" placeholder="Ordner oder Pfad" required>
+        <input type="hidden" name="Pfad" value="{{ aktueller_pfad }}">
+        <button type="submit">📁Ordner anlegen</button>
+    </form>
+
+    <form id="uploadForm" method="post" enctype="multipart/form-data" class="mb-4 d-flex gap-2">
+        <input type="file" name="datei" class="form-control">
+        <input type="hidden" name="Pfad" value="{{ aktueller_pfad }}">
+        <button type="submit" class="btn btn-primary">📤 Hochladen</button>
+    </form>
+
+
+
+
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+    <tbody>
+        {% for eintrag in ordner %}
+        <tr>
+            <td>
+                <a>📁</a>
+                <a href="{{ url_for('index', pfad=eintrag['pfad']) }}">{{ eintrag['name'] }}</a>
+            </td>
+            <td>
+                <form action="/delete" method="post">
+                    <input type="hidden" name="Pfad" value="{{ eintrag['pfad'] }}">
+                    <button class="btn btn-sm btn-danger">🗑️</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+
+        {% for datei in dateien %}
+        <tr>
+            <td>
+                <div class="file-info">
+                    <a href="{{ url_for('download_file', pfad=datei['pfad']) }}">{{ datei['name'] }}</a>
+
+                    {% if datei['name'].endswith('.mp4') %}
+                        <video src="{{ url_for('download_file', pfad=datei['pfad']) }}" class="preview" muted autoplay loop></video>
+                    {% elif datei['name'].endswith('.jpg') or datei['name'].endswith('.png') %}
+                        <img src="{{ url_for('download_file', pfad=datei['pfad']) }}" class="preview"/>
+                    {% endif %}
+                </div>
+
+            </td>
+
+            <td>
+                <form action="/delete" method="post" style="display:inline;">
+                    <input type="hidden" name="Pfad" value="{{ datei['pfad'] }}">
+                    <button class="btn btn-sm btn-danger">🗑️</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
