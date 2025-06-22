@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud</title>
+</head>
+
+<body>
+    <h1>Cloud Ordnerverwaltung</h1>
+
+    <form action="/ordner-anlegen" method="post">
+        <input type="text" name="Ordnername" placeholder="Neuer Ordnername" required>
+        <button type="submit">Ordner anlegen</button>
+    </form>
+
+    <ul>
+        {% for eintrag in ordner %}
+            <li>{{ eintrag }}</li>
+        {% endfor %}
+    </ul>
+
+
+</body>
+
+
+
+</html>
