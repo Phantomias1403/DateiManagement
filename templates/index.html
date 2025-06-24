@@ -21,15 +21,11 @@
     </form>
 
     <form id="uploadForm" method="post" enctype="multipart/form-data" class="mb-4 d-flex gap-2">
-        <input type="file" name="datei" class="form-control">
+        <input type="file" name="datei" class="form-control" multiple>
+        <input type="text" name="neuer_dateiname" placeholder="Optional: Neuer Dateiname" class="form-control">
         <input type="hidden" name="Pfad" value="{{ aktueller_pfad }}">
         <button type="submit" class="btn btn-primary">📤 Hochladen</button>
     </form>
-
-    <button>Deine Mutter</button>
-
-
-
     <table class="table table-hover">
         <thead>
             <tr>
@@ -45,9 +41,14 @@
                 <a href="{{ url_for('index', pfad=eintrag['pfad']) }}">{{ eintrag['name'] }}</a>
             </td>
             <td>
-                <form action="/delete" method="post">
+                <form class="rename-form" action="/umbenennen" method="post" style="display:inline;">
                     <input type="hidden" name="Pfad" value="{{ eintrag['pfad'] }}">
-                    <button class="btn btn-sm btn-danger">🗑️</button>
+                    <button type="button" class="rename-trigger">✏️</button>
+
+                    <div class="rename-input" style="display: none;">
+                        <input type="text" name="neuer_name" value="{{ eintrag['name'] }}">
+                        <button type="submit" class="btn btn-sm btn-success">Speichern</button>
+                    </div>
                 </form>
             </td>
         </tr>
@@ -69,9 +70,14 @@
             </td>
 
             <td>
-                <form action="/delete" method="post" style="display:inline;">
+                <form class="rename-form" action="/umbenennen" method="post" style="display:inline;">
                     <input type="hidden" name="Pfad" value="{{ datei['pfad'] }}">
-                    <button class="btn btn-sm btn-danger">🗑️</button>
+                    <button type="button" class="rename-trigger">✏️</button>
+
+                    <div class="rename-input" style="display: none;">
+                        <input type="text" name="neuer_name" value="{{ datei['name'] }}">
+                        <button type="submit" class="btn btn-sm btn-success">Speichern</button>
+                    </div>
                 </form>
             </td>
         </tr>
@@ -81,7 +87,7 @@
 
 
 
-
+    <script src="https://kit.fontawesome.com/431fa2a989.js" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

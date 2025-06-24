@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById('uploadForm')
+    const trigggerButtons = document.querySelectorAll('.rename-trigger');
     if(!form) return;
 
     form.addEventListener("submit", async(e) => {
@@ -23,5 +24,19 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Netzwerkfehler:", err);
         }
     });
+
+    trigggerButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const form = button.closest('.rename-form');
+            const inputDiv = form.querySelector('.rename-input');
+            inputDiv.style.display = "block";
+            button.style.display = "none";
+        });
+    });
+
 });
+
+
+
+
 
